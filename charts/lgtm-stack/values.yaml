@@ -1,15 +1,13 @@
 kube-prometheus-stack:
   enabled: true
-
   alertmanager:
     enabled: true
-
   prometheus:
     enabled: true
     prometheusSpec:
+      ## depend on mimir.enabled is true
       remoteWrite:
         - url: http://{{ .Release.Name }}-mimir-nginx/api/v1/push
-
   grafana:
     enabled: false
     forceDeployDashboards: true
@@ -62,7 +60,8 @@ tempo:
         datasourceUid: 'Loki'
 
 mimir:
-  enabled: false
+  ## add mimir url to kube-prometheus-stack.prometheus.prometheusSpec.remoteWrite, if enabled is true
+  enabled: true
   datasource:
     enabled: true
     uid: mimir
