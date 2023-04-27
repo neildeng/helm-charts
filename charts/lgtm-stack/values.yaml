@@ -1,0 +1,78 @@
+kube-prometheus-stack:
+  enabled: true
+
+  alertmanager:
+    enabled: true
+
+  prometheus:
+    enabled: true
+    prometheusSpec:
+      remoteWrite:
+        - url: http://{{ .Release.Name }}-mimir-nginx/api/v1/push
+
+  grafana:
+    enabled: false
+    forceDeployDashboards: true
+    forceDeployDatasources: true
+
+loki-stack:
+  enabled: true
+  loki:
+    isDefault: false
+    datasource:
+      jsonData: |-
+        derivedFields:
+          - name: TraceID
+            datasourceName: Tempo
+            datasourceUid: tempo
+            matcherRegex: "traceID=(\\w+)"
+            url: "$${__value.raw}"
+          - name: Trace_ID
+            datasourceName: Tempo
+            datasourceUid: tempo
+            matcherRegex: "\"trace_id\": \"(\\w+)\""
+            url: "$${__value.raw}"
+  promtail:
+    config:
+      clients:
+        - url: http://{{ .Release.Name }}-loki:3100/loki/api/v1/push
+
+grafana:
+  enabled: true
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+tempo:
+  enabled: true
+  datasource:
+    enabled: true
+    uid: tempo
+    isDefault: false
+    jsonData: |-
+      serviceMap:
+        datasourceUid: 'Prometheus'
+      search:
+        hide: false
+      nodeGraph:
+        enabled: true
+      lokiSearch:
+        datasourceUid: 'Loki'
+
+mimir:
+  enabled: false
+  datasource:
+    enabled: true
+    uid: mimir
+    isDefault: false
+    jsonData: {}
+
+phlare:
+  enabled: true
+  datasource:
+    enabled: true
+    uid: phlare
+    isDefault: false
+    jsonData: {}

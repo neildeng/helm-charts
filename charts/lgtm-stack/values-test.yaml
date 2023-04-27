@@ -1,0 +1,5 @@
+grafana:
+  enabled: true
+  adminPassword: '1qaz@WSX'
+  image:
+    tag: '9.5.1'

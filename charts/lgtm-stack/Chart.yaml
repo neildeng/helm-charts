@@ -1,0 +1,42 @@
+apiVersion: v2
+name: lgtm-stack
+version: 1.0.0
+appVersion: "1.0.0"
+kubeVersion: ""
+description: "LGTM: Scale observability with Mimir, Loki, and Tempo"
+home: https://grafana.com/
+type: application
+maintainers:
+  - name: neildeng
+    email: neil.deng.g@gmail.com
+dependencies:
+  - name: "kube-prometheus-stack"
+    alias: "kube-prometheus-stack"
+    version: "~45.21.0"
+    repository:  "https://prometheus-community.github.io/helm-charts"
+    condition: kube-prometheus-stack.enabled
+  - name: "grafana"
+    alias: "grafana"
+    version: "6.55.1"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: grafana.enabled
+  - name: "loki-stack"
+    alias: "loki-stack"
+    version: "~2.9.10"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: loki-stack.enabled
+  - name: "mimir-distributed"
+    alias: "mimir"
+    version: "~4.3.1"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: mimir.enabled
+  - name: "tempo"
+    alias: "tempo"
+    version: "~1.1.0"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: tempo.enabled
+  - name: "phlare"
+    alias: "phlare"
+    version: "~0.5.3"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: phlare.enabled

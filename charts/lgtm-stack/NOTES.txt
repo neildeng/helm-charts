@@ -1,0 +1,1 @@
+The LGTM stack has been deployed to your cluster.
